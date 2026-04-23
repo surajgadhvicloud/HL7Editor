@@ -20,7 +20,6 @@ function SegmentListPanel({ segments, selectedSegmentIndex, onSelectSegment, onA
         ) : (
           segments.map((segment, index) => {
             const preview = segment.fields.join('|').slice(0, 48)
-            const isRemovable = segment.code === 'OBR' || segment.code === 'OBX'
 
             return (
               <div
@@ -36,16 +35,14 @@ function SegmentListPanel({ segments, selectedSegmentIndex, onSelectSegment, onA
                   <span className="segment-code">{segment.code}</span>
                   <span className="segment-preview">{preview}</span>
                 </button>
-                {isRemovable && (
-                  <button
-                    type="button"
-                    className="remove-segment-btn"
-                    onClick={() => onRemoveSegment(index)}
-                    title={`Remove ${segment.code} segment`}
-                  >
-                    ×
-                  </button>
-                )}
+                <button
+                  type="button"
+                  className="remove-segment-btn"
+                  onClick={() => onRemoveSegment(index)}
+                  title={`Remove ${segment.code} segment`}
+                >
+                  ×
+                </button>
               </div>
             )
           })

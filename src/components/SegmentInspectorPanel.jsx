@@ -6,7 +6,7 @@ import {
 } from '../utils/hl7Metadata'
 import { getRenderableFields } from '../utils/hl7Parser'
 
-function SegmentInspectorPanel({ segment, selectedSegmentIndex, onFieldChange }) {
+function SegmentInspectorPanel({ segment, selectedSegmentIndex, onFieldChange, onAddField }) {
   if (!segment) {
     return (
       <section className="panel">
@@ -56,6 +56,12 @@ function SegmentInspectorPanel({ segment, selectedSegmentIndex, onFieldChange })
             })}
           </tbody>
         </table>
+      </div>
+
+      <div className="action-row">
+        <button type="button" onClick={() => onAddField(selectedSegmentIndex)}>
+          + Add Field
+        </button>
       </div>
     </section>
   )

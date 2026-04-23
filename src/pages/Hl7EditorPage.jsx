@@ -76,10 +76,15 @@ function Hl7EditorPage() {
     setSelectedSegmentIndex(insertAt)
   }
 
-  function handleRemoveSegment(segmentIndex) {
-    const segment = parsedSegments[segmentIndex]
-    if (!segment || !['OBR', 'OBX'].includes(segment.code)) return
+  function handleAddField(segmentIndex) {
+    setParsedSegments((prev) =>
+      prev.map((seg, i) =>
+        i === segmentIndex ? { ...seg, fields: [...seg.fields, ''] } : seg,
+      ),
+    )
+  }
 
+  function handleRemoveSegment(segmentIndex) {
     const nextSegments = parsedSegments.filter((_, i) => i !== segmentIndex)
     setParsedSegments(nextSegments)
 
@@ -156,6 +161,7 @@ function Hl7EditorPage() {
             segment={selectedSegment}
             selectedSegmentIndex={selectedSegmentIndex}
             onFieldChange={handleFieldChange}
+            onAddField={handleAddField}
           />
         </div>
       </section>
