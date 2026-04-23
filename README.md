@@ -1,50 +1,63 @@
-# HL7 Editor and Inspector (MVP)
+# HL7 Editor and Inspector
 
-Frontend-only React app to parse, inspect, edit, and regenerate HL7 messages.
-
-## Tech Stack
-
-- React (JavaScript)
-- Vite
-- Plain CSS
+A browser-based tool for parsing, inspecting, editing, and regenerating HL7 v2.x messages. No backend, no installation beyond Node — just paste or load a message and work with it field by field.
 
 ## Features
 
-- Paste HL7 message and parse by clicking **Parse**.
-- Load a realistic sample with MSH, PID, OBR, and multiple OBX segments.
-- View parsed segments in original order.
-- Select any segment (MSH, PID, OBR, OBX, etc.).
-- Inspect fields with position labels and metadata tooltips.
-- Edit field values inline.
-- Regenerate HL7 output and copy to clipboard.
+- **Parse** any HL7 v2.x message pasted into the input box or opened from a `.hl7` file
+- **Sample messages** — pick from a dropdown of pre-built lab and radiology messages; drop a new `.hl7` file into `src/HL7/` and it appears automatically
+- **Segment list** — clickable list of all parsed segments with a live field preview
+- **Field inspector** — table view of every field in the selected segment with position labels and metadata tooltips
+- **Inline editing** — edit any field value; the regenerated HL7 output updates instantly
+- **Add segments** — append OBR or OBX segments (always positioned after PID / PV1 / ORC)
+- **Remove segments** — delete any OBR or OBX segment via the × button in the segment list
+- **Copy / Save** — copy the regenerated message to clipboard or download it as a `.hl7` file
 
-## Run
+## Getting Started
 
 ```bash
 npm install
-npm run dev
+npm run dev        # http://localhost:5173
 ```
 
-Build production bundle:
-
 ```bash
-npm run build
+npm run build      # production bundle → /dist
+npm run preview    # preview the production build locally
+```
+
+## Adding Sample Messages
+
+Place any `.hl7` file in `src/HL7/`. It will appear in the **Load Sample** dropdown automatically after the next dev server save or build — no code changes needed.
+
+## Project Structure
+
+```
+src/
+├── HL7/                           # Sample .hl7 files
+├── components/
+│   ├── Hl7InputPanel.jsx          # Raw text input, file open, sample dropdown
+│   ├── SegmentListPanel.jsx       # Segment list with add/remove controls
+│   ├── SegmentInspectorPanel.jsx  # Field-level editing table
+│   ├── FieldRow.jsx               # Single field row (label, input, info)
+│   └── RegeneratedOutputPanel.jsx # Read-only output with copy/save
+├── pages/
+│   └── Hl7EditorPage.jsx          # All state and handlers
+├── utils/
+│   ├── hl7Parser.js               # parse, inspect, update field
+│   ├── hl7Serializer.js           # serialize segments back to HL7 text
+│   ├── hl7Metadata.js             # segment/field descriptions and tooltips
+│   └── samples.js                 # auto-discovers src/HL7/*.hl7 via import.meta.glob
+└── styles.css
 ```
 
 ## How Field Positions Are Preserved
 
-The parser uses simple string splitting and keeps empty tokens:
+The parser splits lines by `|` and retains empty tokens as empty strings — so field positions are never lost. Serialization simply rejoins with `|` and segments with `\r`, preserving `||` placeholders exactly as they appeared in the original message.
 
-1. Segment split: uses `/\r\n|\n|\r/`.
-2. Field split: each segment line is split by `|`.
-3. Empty field tokens are never filtered out.
-4. Field indices are position-based (`SEG-1`, `SEG-2`, ...), even when values are blank.
-5. Serialization rejoins fields with the field separator and segments with `\r`.
+MSH is handled specially: `MSH-1` (field separator) and `MSH-2` (encoding characters) are extracted and stored separately, then reconstructed correctly on serialization.
 
-Because empty fields are retained as empty strings, placeholders remain in output, so separators (for example `||`) keep their original positional meaning.
+## Tech Stack
 
-## Notes
-
-- Native `title` tooltips are used for field help text.
-- MSH is rendered with HL7-aware labeling including `MSH-1 (Field Separator)` and `MSH-2 (Encoding Characters)`.
-- This MVP intentionally avoids backend, authentication, and database concerns.
+- React 18
+- Vite 8
+- Plain CSS (no UI library)
