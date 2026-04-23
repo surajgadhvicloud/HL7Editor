@@ -1,11 +1,16 @@
-function RegeneratedOutputPanel({ regeneratedHl7, onCopy, copyState }) {
+function RegeneratedOutputPanel({ regeneratedHl7, onCopy, onSave, copyState }) {
   return (
     <section className="panel output-panel">
       <div className="panel-header">
         <h2>Regenerated HL7</h2>
-        <button type="button" onClick={onCopy} className="primary-btn" disabled={!regeneratedHl7}>
-          Copy HL7
-        </button>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <button type="button" onClick={onCopy} className="primary-btn" disabled={!regeneratedHl7}>
+            Copy HL7
+          </button>
+          <button type="button" onClick={onSave} className="secondary-btn" disabled={!regeneratedHl7}>
+            Save
+          </button>
+        </div>
       </div>
 
       <textarea

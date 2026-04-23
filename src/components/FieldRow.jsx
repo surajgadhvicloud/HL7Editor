@@ -2,7 +2,6 @@ function FieldRow({ label, value, onValueChange, tooltip }) {
   return (
     <tr>
       <td className="cell-label">{label}</td>
-      <td className="cell-value">{value === '' ? '(blank)' : value}</td>
       <td>
         <input
           className="field-input"

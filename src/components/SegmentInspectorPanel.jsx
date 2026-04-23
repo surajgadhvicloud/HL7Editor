@@ -34,7 +34,6 @@ function SegmentInspectorPanel({ segment, selectedSegmentIndex, onFieldChange })
           <thead>
             <tr>
               <th>Field</th>
-              <th>Value</th>
               <th>Edit</th>
               <th>Info</th>
             </tr>

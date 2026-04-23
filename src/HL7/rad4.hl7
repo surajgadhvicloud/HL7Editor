@@ -1,0 +1,6 @@
+MSH|^~\&|RIS|RadiologyDept|EHR|CityHospital|202604031215||ORU^R01|RAD0004|P|2.3
+PID|1||P200004^^^CityHospital||Gupta^Sneha||19930925|F
+PV1|1|O|RAD||||D2004^Chatterjee^Rina
+ORC|RE|RADORD1004||RADFILL1004
+OBR|1|RADORD1004|RADFILL1004|US-ABD^Ultrasound Abdomen|||202604031140||||||||D2004^Chatterjee^Rina
+OBX|1|TX|RADRPT^Radiology Report||Liver is normal in size and echotexture. Gallbladder shows no calculi. No free fluid in abdomen.|||N|||F

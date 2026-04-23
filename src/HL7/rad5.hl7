@@ -1,0 +1,7 @@
+MSH|^~\&|RIS|RadiologyDept|EHR|CityHospital|202604031230||ORU^R01|RAD0005|P|2.3
+PID|1||P200005^^^CityHospital||Yadav^Rohit||19980117|M
+PV1|1|O|ORTHO||||D2005^Agarwal^Neeraj
+ORC|RE|RADORD1005||RADFILL1005
+OBR|1|RADORD1005|RADFILL1005|XR-KNEE^X-Ray Knee AP/Lateral|||202604031150||||||||D2005^Agarwal^Neeraj
+OBX|1|TX|RADRPT^Radiology Report||No acute fracture or dislocation. Joint spaces are preserved. Mild soft tissue swelling noted.|||N|||F
+OBX|2|CE|IMGREF^DICOM Study UID||1.2.840.113619.2.55.3.604688435.781.1599123456.467|||N|||F

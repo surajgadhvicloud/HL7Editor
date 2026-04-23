@@ -5,7 +5,6 @@ import SegmentInspectorPanel from '../components/SegmentInspectorPanel'
 import RegeneratedOutputPanel from '../components/RegeneratedOutputPanel'
 import { parseHl7Message, updateSegmentField } from '../utils/hl7Parser'
 import { serializeHl7Message } from '../utils/hl7Serializer'
-import { sampleHl7Message } from '../utils/sampleHl7'
 
 function Hl7EditorPage() {
   const [hl7Text, setHl7Text] = useState('')
@@ -24,9 +23,9 @@ function Hl7EditorPage() {
     setSelectedSegmentIndex(segments.length > 0 ? 0 : null)
   }
 
-  function handleLoadSample() {
-    setHl7Text(sampleHl7Message)
-    const segments = parseHl7Message(sampleHl7Message)
+  function handleLoadSample(text) {
+    setHl7Text(text)
+    const segments = parseHl7Message(text)
     setParsedSegments(segments)
     setSelectedSegmentIndex(segments.length > 0 ? 0 : null)
     setCopyState('')
@@ -43,6 +42,63 @@ function Hl7EditorPage() {
     setParsedSegments((currentSegments) =>
       updateSegmentField(currentSegments, segmentIndex, fieldPosition, newValue),
     )
+  }
+
+  function handleAddSegment(segmentCode) {
+    const separator =
+      parsedSegments.find((s) => s.code === 'MSH')?.fieldSeparator ?? '|'
+
+    const fieldCount = segmentCode === 'OBX' ? 11 : 7
+    const newSegment = {
+      code: segmentCode,
+      fieldSeparator: separator,
+      fields: Array(fieldCount).fill(''),
+      rawLine: `${segmentCode}${separator}`,
+    }
+
+    // OBR/OBX must always come after PID, PV1, ORC — find the last such anchor
+    const anchorCodes = new Set(['PID', 'PV1', 'ORC', 'OBR', 'OBX'])
+    let insertAt = parsedSegments.length
+    for (let i = parsedSegments.length - 1; i >= 0; i--) {
+      if (anchorCodes.has(parsedSegments[i].code)) {
+        insertAt = i + 1
+        break
+      }
+    }
+
+    const nextSegments = [
+      ...parsedSegments.slice(0, insertAt),
+      newSegment,
+      ...parsedSegments.slice(insertAt),
+    ]
+
+    setParsedSegments(nextSegments)
+    setSelectedSegmentIndex(insertAt)
+  }
+
+  function handleRemoveSegment(segmentIndex) {
+    const segment = parsedSegments[segmentIndex]
+    if (!segment || !['OBR', 'OBX'].includes(segment.code)) return
+
+    const nextSegments = parsedSegments.filter((_, i) => i !== segmentIndex)
+    setParsedSegments(nextSegments)
+
+    if (selectedSegmentIndex === segmentIndex) {
+      setSelectedSegmentIndex(nextSegments.length > 0 ? Math.max(0, segmentIndex - 1) : null)
+    } else if (selectedSegmentIndex !== null && selectedSegmentIndex > segmentIndex) {
+      setSelectedSegmentIndex(selectedSegmentIndex - 1)
+    }
+  }
+
+  function handleSave() {
+    if (!regeneratedHl7) return
+    const blob = new Blob([regeneratedHl7], { type: 'text/plain' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'message.hl7'
+    a.click()
+    URL.revokeObjectURL(url)
   }
 
   async function handleCopy() {
@@ -80,6 +136,7 @@ function Hl7EditorPage() {
           <RegeneratedOutputPanel
             regeneratedHl7={regeneratedHl7}
             onCopy={handleCopy}
+            onSave={handleSave}
             copyState={copyState}
           />
         </div>
@@ -89,6 +146,8 @@ function Hl7EditorPage() {
             segments={parsedSegments}
             selectedSegmentIndex={selectedSegmentIndex}
             onSelectSegment={setSelectedSegmentIndex}
+            onAddSegment={handleAddSegment}
+            onRemoveSegment={handleRemoveSegment}
           />
         </div>
 

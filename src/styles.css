@@ -122,6 +122,12 @@ textarea {
   margin-top: 0.65rem;
 }
 
+.add-segment-row {
+  border-top: 1px solid #d8e3e8;
+  padding-top: 0.65rem;
+  margin-top: 0.65rem;
+}
+
 button {
   border: 1px solid #aac4d0;
   background: #f4fbff;
@@ -130,6 +136,16 @@ button {
   padding: 0.42rem 0.8rem;
   cursor: pointer;
   transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.sample-select {
+  border: 1px solid #aac4d0;
+  background: #f4fbff;
+  color: #194154;
+  border-radius: 10px;
+  padding: 0.42rem 0.8rem;
+  cursor: pointer;
+  font-size: inherit;
 }
 
 button:hover {
@@ -165,17 +181,55 @@ button:disabled {
 
 .segment-row {
   width: 100%;
-  text-align: left;
-  display: grid;
-  grid-template-columns: 60px minmax(0, 1fr);
-  gap: 0.5rem;
+  display: flex;
   align-items: center;
   background: #f9fcfd;
+  border: 1px solid #aac4d0;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .segment-row.active {
   background: #d8edf5;
   border-color: #7fb6cb;
+}
+
+.segment-select-btn {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr);
+  gap: 0.5rem;
+  align-items: center;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0.45rem 0.6rem;
+}
+
+.segment-select-btn:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.remove-segment-btn {
+  flex-shrink: 0;
+  width: 1.8rem;
+  height: 100%;
+  border: none;
+  border-left: 1px solid #aac4d0;
+  border-radius: 0;
+  background: transparent;
+  color: #8a4040;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+}
+
+.remove-segment-btn:hover {
+  background: #fde8e8;
+  color: #c0392b;
 }
 
 .segment-code {
@@ -203,7 +257,7 @@ button:disabled {
 .field-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 560px;
+  table-layout: fixed;
 }
 
 .field-table th,
@@ -224,6 +278,7 @@ button:disabled {
 }
 
 .cell-label {
+  width: 140px;
   font-family: "Cascadia Code", Consolas, monospace;
   font-size: 0.8rem;
   color: #1f485d;
@@ -239,6 +294,7 @@ button:disabled {
 
 .field-input {
   width: 100%;
+  box-sizing: border-box;
   border: 1px solid #c7d7de;
   border-radius: 8px;
   padding: 0.36rem 0.5rem;

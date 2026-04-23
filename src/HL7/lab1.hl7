@@ -1,0 +1,6 @@
+MSH|^~\&|LabSystem|CentralLab|EHR|CityHospital|202604031000||ORU^R01|LAB0001|P|2.3
+PID|1||P100001^^^CityHospital||Sharma^Rahul||19880510|M
+PV1|1|O|OPD||||D1001^Mehta^Anil
+ORC|RE|ORD1001||FILL1001
+OBR|1|ORD1001|FILL1001|718-7^Hemoglobin^LN|||202604030930||||||||D1001^Mehta^Anil
+OBX|1|NM|718-7^Hemoglobin^LN||13.8|g/dL|13.0-17.0|N|||F
